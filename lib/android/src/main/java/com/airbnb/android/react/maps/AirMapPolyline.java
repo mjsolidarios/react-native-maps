@@ -5,11 +5,17 @@ import android.content.Context;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AirMapPolyline extends AirMapFeature {
@@ -22,6 +28,18 @@ public class AirMapPolyline extends AirMapFeature {
   private float width;
   private boolean geodesic;
   private float zIndex;
+
+  // TODO: To add as props (lineDashLength, lineGapLength)
+  private int PATTERN_DASH_LENGTH_PX = 20;
+  private int PATTERN_GAP_LENGTH_PX = 20;
+  
+  // TODO: Add as optional prop
+  private PatternItem DOT = new Dot();
+  private PatternItem DASH = new Dash(PATTERN_DASH_LENGTH_PX);
+  private PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
+
+  // Create a stroke pattern of a gap followed by a dash.
+  private List<PatternItem> PATTERN_POLYGON = Arrays.asList(GAP, DASH);
 
   public AirMapPolyline(Context context) {
     super(context);
@@ -81,6 +99,10 @@ public class AirMapPolyline extends AirMapFeature {
     options.width(width);
     options.geodesic(geodesic);
     options.zIndex(zIndex);
+    // TODO: Should connect to react
+    // this currently forces the map to use pattern
+    // on all polylines
+    options.pattern(PATTERN_POLYGON);
     return options;
   }
 
